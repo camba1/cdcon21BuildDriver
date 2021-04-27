@@ -105,7 +105,7 @@
             {/if}
 
             <NavItem>
-                <NavLink href="https://github.com/camba1/gotemp">
+                <NavLink href="https://github.com/camba1/cdcon21BuildDriver">
                    <span>
                        <i class="fab fa-github"></i>
                    </span>
