@@ -8,10 +8,5 @@ This folder contains code related to the promotion service. It is organized as f
 
 Additionally, this folder contains the following files:
 
-- `DockerfileCli`: Build the image for the promotion client
-- `Dockerfile`: Build the image for the promotion service
 - `docker-compose.env`: Environment variables required to run the service when running the service
 - `docker-compose-cli.env`: Environment variable required to run the client when running the service 
-
-Note that these docker files expect to be built using the root folder of the whole project as the context
-(i.e.: do not build the docker build directly in this folder)
