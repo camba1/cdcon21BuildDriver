@@ -12,10 +12,11 @@ services:
     ports:
       - "5432:5432"
   promotionsrv:
-    build:
-      context: .
-      dockerfile: ./promotion/Dockerfile
-      target: dev
+    image: cdconpromotionsrv
+#    build:
+#      context: .
+#      dockerfile: ./promotion/Dockerfile
+#      target: dev
     depends_on:
       - pgdb
       - nats
@@ -23,133 +24,141 @@ services:
       - customersrv
       - redis
     container_name: promotionsrvcont
-    entrypoint: CompileDaemon --build="go build -o promotionServer ./promotion/server/" --command=./promotionServer
+#    entrypoint: CompileDaemon --build="go build -o promotionServer ./promotion/server/" --command=./promotionServer
     env_file: ./promotion/docker-compose.env
-    volumes:
-      - ./promotion/server:/go/src/goTemp/promotion/server
-      - ./globalUtils:/go/src/goTemp/globalUtils
+#    volumes:
+#      - ./promotion/server:/go/src/cdcon21builddriver/promotion/server
+#      - ./globalUtils:/go/src/cdcon21builddriver/globalUtils
     ports:
       - "50051:50051"
       - "2114:2112"
   promotioncli:
-    build:
-      context: .
-      dockerfile: ./promotion/DockerfileCli
-      target: dev
+    image: cdconpromotioncli
+#    build:
+#      context: .
+#      dockerfile: ./promotion/DockerfileCli
+#      target: dev
     depends_on:
       - usersrv
     container_name: promotionclicont
     env_file: ./promotion/docker-compose-cli.env
-    entrypoint: CompileDaemon --build="go build -o promotionClient ./promotion/client/" --command=./promotionClient
-    volumes:
-      - ./promotion/client:/go/src/goTemp/promotion/client
+#    entrypoint: CompileDaemon --build="go build -o promotionClient ./promotion/client/" --command=./promotionClient
+#    volumes:
+#      - ./promotion/client:/go/src/cdcon21builddriver/promotion/client
     ports:
       - "50052:50051"
   usersrv:
-    build:
-      context: .
-      dockerfile: ./user/Dockerfile
-      target: dev
+    image: cdconusersrv
+#    build:
+#      context: .
+#      dockerfile: ./user/Dockerfile
+#      target: dev
     depends_on:
       - pgdb
       - nats
     container_name: usersrvcont
-    entrypoint: CompileDaemon --build="go build -o userServer ./user/server/" --command=./userServer
+#    entrypoint: CompileDaemon --build="go build -o userServer ./user/server/" --command=./userServer
     env_file: ./user/docker-compose.env
-    volumes:
-      - ./user/server:/go/src/goTemp/user/server
-      - ./globalUtils:/go/src/goTemp/globalUtils
-      - ./globalMonitoring:/go/src/goTemp/globalMonitoring
+#    volumes:
+#      - ./user/server:/go/src/cdcon21builddriver/user/server
+#      - ./globalUtils:/go/src/cdcon21builddriver/globalUtils
+#      - ./globalMonitoring:/go/src/cdcon21builddriver/globalMonitoring
     ports:
       - "50053:50053"
       - "2111:2112"
   usercli:
-    build:
-      context: .
-      dockerfile: ./user/DockerfileCli
-      target: dev
+    image: cdconusercli
+#    build:
+#      context: .
+#      dockerfile: ./user/DockerfileCli
+#      target: dev
     container_name: userclicont
     env_file: ./user/docker-compose-cli.env
-    entrypoint: CompileDaemon --build="go build -o userClient ./user/client/" --command=./userClient
-    volumes:
-      - ./user/client:/go/src/goTemp/user/client
+#    entrypoint: CompileDaemon --build="go build -o userClient ./user/client/" --command=./userClient
+#    volumes:
+#      - ./user/client:/go/src/cdcon21builddriver/user/client
     ports:
       - "50054:50051"
   auditsrv:
-    build:
-      context: .
-      dockerfile: ./audit/Dockerfile
-      target: dev
+    image: cdconauditsrv
+#    build:
+#      context: .
+#      dockerfile: ./audit/Dockerfile
+#      target: dev
     depends_on:
       - timescaledb
       - nats
     container_name: auditsrvcont
-    entrypoint: CompileDaemon --build="go build -o auditServer ./audit/server/" --command=./auditServer
+#    entrypoint: CompileDaemon --build="go build -o auditServer ./audit/server/" --command=./auditServer
     env_file: ./audit/docker-compose.env
-    volumes:
-      - ./audit/server:/go/src/goTemp/audit/server
-      - ./globalUtils:/go/src/goTemp/globalUtils
+#    volumes:
+#      - ./audit/server:/go/src/cdcon21builddriver/audit/server
+#      - ./globalUtils:/go/src/cdcon21builddriver/globalUtils
     ports:
       - "50055:50055"
       - "2115:2112"
   customersrv:
-    build:
-      context: .
-      dockerfile: ./customer/Dockerfile
-      target: dev
+    image: cdconcustomersrv
+#    build:
+#      context: .
+#      dockerfile: ./customer/Dockerfile
+#      target: dev
     depends_on:
       - arangodb
       - nats
       - usersrv
     container_name: customersrvcont
-    entrypoint: CompileDaemon --build="go build -o customerServer ./customer/server/" --command=./customerServer
+#    entrypoint: CompileDaemon --build="go build -o customerServer ./customer/server/" --command=./customerServer
     env_file: ./customer/docker-compose.env
-    volumes:
-      - ./customer/server:/go/src/goTemp/customer/server
-      - ./globalUtils:/go/src/goTemp/globalUtils
+#    volumes:
+#      - ./customer/server:/go/src/cdcon21builddriver/customer/server
+#      - ./globalUtils:/go/src/cdcon21builddriver/globalUtils
     ports:
       - "50057:50057"
       - "2112:2112"
   customercli:
-    build:
-      context: .
-      dockerfile: ./customer/DockerfileCli
-      target: dev
+    image: cdconcustomercli
+#    build:
+#      context: .
+#      dockerfile: ./customer/DockerfileCli
+#      target: dev
     container_name: customerclicont
     env_file: ./customer/docker-compose-cli.env
-    entrypoint: CompileDaemon --build="go build -o customerClient ./customer/client/" --command=./customerClient
-    volumes:
-      - ./customer/client:/go/src/goTemp/customer/client
+#    entrypoint: CompileDaemon --build="go build -o customerClient ./customer/client/" --command=./customerClient
+#    volumes:
+#      - ./customer/client:/go/src/cdcon21builddriver/customer/client
     ports:
       - "50058:50051"
   productsrv:
-    build:
-      context: .
-      dockerfile: ./product/Dockerfile
-      target: dev
+    image: cdconproductsrv
+#    build:
+#      context: .
+#      dockerfile: ./product/Dockerfile
+#      target: dev
     depends_on:
       - arangodb
       - nats
       - usersrv
     container_name: productsrvcont
-    entrypoint: CompileDaemon --build="go build -o productServer ./product/server/" --command=./productServer
+#    entrypoint: CompileDaemon --build="go build -o productServer ./product/server/" --command=./productServer
     env_file: ./product/docker-compose.env
-    volumes:
-      - ./product/server:/go/src/goTemp/product/server
-      - ./globalUtils:/go/src/goTemp/globalUtils
+#    volumes:
+#      - ./product/server:/go/src/cdcon21builddriver/product/server
+#      - ./globalUtils:/go/src/cdcon21builddriver/globalUtils
     ports:
       - "50059:50059"
       - "2113:2112"
   productcli:
-    build:
-      context: .
-      dockerfile: ./product/DockerfileCli
-      target: dev
+    image: cdconproductcli
+#    build:
+#      context: .
+#      dockerfile: ./product/DockerfileCli
+#      target: dev
     container_name: productclicont
     env_file: ./product/docker-compose-cli.env
-    entrypoint: CompileDaemon --build="go build -o productClient ./product/client/" --command=./productClient
-    volumes:
-      - ./product/client:/go/src/goTemp/product/client
+#    entrypoint: CompileDaemon --build="go build -o productClient ./product/client/" --command=./productClient
+#    volumes:
+#      - ./product/client:/go/src/cdcon21builddriver/product/client
     ports:
       - "50060:50051"
   nats:
@@ -195,22 +204,23 @@ services:
   microapi:
     image: micro/micro:v2.9.3
     container_name: microcont
-    command: api --handler=rpc --namespace=goTemp.api
+    command: api --handler=rpc --namespace=cdcon21builddriver.api
     ports:
     - "8080:8080"
   web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-      target: dev
+    image: cdconweb
+#    build:
+#      context: ./web
+#      dockerfile: Dockerfile
+#      target: dev
     depends_on:
       - microapi
     container_name: gtweb
     env_file: ./web/docker-compose.env
     volumes:
-    - ./web/sapper/src:/goTemp/web/sapper/src
+    - ./web/sapper/src:/cdcon21builddriver/web/sapper/src
     ports:
-    - "3000:3000"
+    - "3000:8080"
     - "10000:10000"
   prometheus:
     image: prom/prometheus
