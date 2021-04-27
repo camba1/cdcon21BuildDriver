@@ -11,35 +11,59 @@ composeup:
 	docker-compose up
 composedown:
 	docker-compose down
-composebuildpromosrv:
-	docker-compose build promotionsrv
-composerestartpromocli:
-	docker-compose rm -fsv promotioncli
-	docker-compose up promotioncli
 
-# Docker sample commands
-docbuildpromosrv:
-	docker build -t promosrv -f promotion/Dockerfile .
-docrunpromosrv:
-	docker run --env-file ./promotion/docker-compose.env -p 50051:50051 --name promosrvcont promosrv
-# run and attach to existing network
-docrunusersrvnet:
-	docker run --env-file ./user/docker-compose.env --network=gotemp_default  -p 50051:50051 --name usersrvcont usersrv
-docbuildpromocli:
-	docker build -t promocli -f promotion/DockerfileCli .
+# BuildPacks
+
+packbuildall:
+	make packbuildsrv
+	make packbuildweb
+	make packbuildtestlclients
+
+packbuildweb:
+	APIURL='http://localhost:8080/' npm run build  --prefix web/sapper
+	pack build cdconweb --path ./web/sapper  --builder gcr.io/buildpacks/builder:v1
+
+packbuildsrv:
+	pack build cdconusersrv --env GOOGLE_BUILDABLE=./user/server --builder gcr.io/buildpacks/builder:v1
+	pack build cdconpromotionsrv --env BP_GO_TARGETS=./promotion/server --builder paketobuildpacks/builder:tiny
+	pack build cdconproductsrv --env BP_GO_TARGETS=./product/server --builder paketobuildpacks/builder:tiny
+	pack build cdconcustomersrv --env BP_GO_TARGETS=./customer/server --builder paketobuildpacks/builder:tiny
+	pack build cdconauditsrv --env BP_GO_TARGETS=./audit/server --builder paketobuildpacks/builder:tiny
+
+packbuildtestlclients:
+	pack build cdconusercli --env GOOGLE_BUILDABLE=./user/client --builder gcr.io/buildpacks/builder:v1
+	pack build cdconpromotioncli --env BP_GO_TARGETS=./promotion/client --builder paketobuildpacks/builder:tiny
+	pack build cdconproductcli --env BP_GO_TARGETS=./product/client --builder paketobuildpacks/builder:tiny
+	pack build cdconcustomercli --env BP_GO_TARGETS=./customer/client --builder paketobuildpacks/builder:tiny
+
+# Running individual services examples
+
+# Build and start service
+packbuildpromosrv:
+	pack build cdconpromotionsrv --env BP_GO_TARGETS=./promotion/server --builder paketobuildpacks/builder:tiny
+pacrunpromosrv:
+	docker-compose up promotionsrv
+
+# Build and start testing client
+pacbuildpromocli:
+	pack build cdconpromotioncli --env BP_GO_TARGETS=./promotion/client --builder paketobuildpacks/builder:tiny
 docrunpromocli:
-	docker run -p 50051:50051 --name promoclicont promocli
+	docker-compose up promotioncli
 
 #DockerHub
 hubpush:
-	docker build -t $$SERVICE -f  $$FOLDER/Dockerfile .
-	docker tag $$SERVICE bolbeck/gotemp_$$SERVICE
-	docker push bolbeck/gotemp_$$SERVICE
+	echo "no implemented yet"
+#	docker build -t $$SERVICE -f  $$FOLDER/Dockerfile .
+#	docker tag $$SERVICE bolbeck/gotemp_$$SERVICE
+#	docker push bolbeck/gotemp_$$SERVICE
 
-hubpushcontext:
-	docker build -t $$SERVICE -f  ./$$FOLDER/Dockerfile ./$$FOLDER
-	docker tag $$SERVICE bolbeck/gotemp_$$SERVICE
-	docker push bolbeck/gotemp_$$SERVICE
+hubpushweb:
+	echo "no implemented yet"
+
+#hubpushcontext:
+#	docker build -t $$SERVICE -f  ./$$FOLDER/Dockerfile ./$$FOLDER
+#	docker tag $$SERVICE bolbeck/gotemp_$$SERVICE
+#	docker push bolbeck/gotemp_$$SERVICE
 
 # -------------------------------------------------------------------------------------
 
@@ -57,10 +81,8 @@ runweb:
 	npm run dev
 
 # Docker
-docbuildweb:
-	docker build -t gotempweb -f ./web/Dockerfile ./web
 docrunweb:
-	docker run -p 3000:3000 --name gotempwebcont gotempweb
+	docker run --rm --name cdconwebcont -p 3000:8080 cdconweb
 
 #Docker-compose
 composeupweb:
@@ -163,7 +185,6 @@ vstopkub:
 
 # ------ Remove setup from Vault -------
 
-# Remove secrets, create roles and policies
 
 # Remove secrets, create roles and policies
 vkubteardown:
