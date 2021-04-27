@@ -39,7 +39,8 @@ As far as observability, the application uses:
 
 Finally, for orchestration, the stack is as follows:
 
-- `Docker` for creating application images
+- `BuildPacks` for creating application images
+- `Screwdriver` for CI/CD
 - `Docker-compose` to run the application
 - `Minikube` to run the application in Kubernetes
 
@@ -70,6 +71,8 @@ As such, the easiest way to run a go-Micro based applications is using Docker or
 
 ![goTemp landing page](diagramsforDocs/UI_goTemp_Landing_small.png "landing Page")
 
+*Prerequisite*: Ensure [Docker](https://www.docker.com) and [Pack](https://buildpacks.io) are installed
+
 Before running the application the first time:
 
 - Clone the repository
@@ -78,6 +81,12 @@ Before running the application the first time:
 
 ```bash
     npm install
+```
+- cd back to the root of the project `cd ../..`
+- Build all images using BuildPacks:
+
+```bash
+    make packbuildall
 ```
 
 To start the application:
@@ -307,8 +316,6 @@ Each one of the services has a similar structure:
 - `client`: Contains a client service that calls the server service to perform multiple operations
 - `proto`: Proto buffer messages and services definitions. Empty if service does not handle real time inter-service communication.
 - `server`: Service that performs a number of actions like interacting with the DB
-- `Dockerfile`: Build the image for the server service
-- `DockerfileCLI`: Build the image of the client service
 - `docker-compose.env`: Environment variables required to run the service when running the service with docker-compose
 - `docker-compose-cli.env`: Environment variables required to run the client when running the client with docker-compose
 
@@ -317,9 +324,11 @@ Each one of the services has a similar structure:
 The different service's images can be built from the root of the repo using the docker build command. 
 For example the user service can be built using:
 
-`docker build -t usersrv -f user/Dockerfile . `
+`pack build cdconusersrv --env GOOGLE_BUILDABLE=./user/server --builder gcr.io/buildpacks/builder:v1 `
 
-Note that there is no need to run this if you are using docker-compose as that will build the image automatically
+Alternatively, a different pack can be used to create a samller image if needed:
+
+`pack build cdconproductsrv --env BP_GO_TARGETS=./product/server --builder paketobuildpacks/builder:tiny`
 
 #### Running individual services
 
@@ -367,7 +376,6 @@ The web application lives in the `./web` folder. Since `Sapper` and `Svelte` gen
         - `server.js`: Used to configure the app with items like middleware and compression
         - `template.html`: Main page that contains our application. We added Bootstrap and Font Awesome CDN references in this page.
     - `static`: Holds static items
-- `Dockerfile`: Used to build the docker image for the web app
         
 ### Routes
 
