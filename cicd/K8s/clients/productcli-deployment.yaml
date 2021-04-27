@@ -40,7 +40,7 @@ spec:
         - containerPort: 50051
         resources: {}
 #        volumeMounts:
-#        - mountPath: /go/src/goTemp/product/client
+#        - mountPath: /go/src/cdcon21builddriver/product/client
 #          name: productcli-claim0
       restartPolicy: Always
       serviceAccountName: ""

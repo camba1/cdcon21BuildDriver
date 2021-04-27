@@ -1,9 +1,9 @@
 package main
 
 import (
+	"cdcon21builddriver/globalUtils"
+	pb "cdcon21builddriver/user/proto"
 	"context"
-	"goTemp/globalUtils"
-	pb "goTemp/user/proto"
 	"reflect"
 	"testing"
 )

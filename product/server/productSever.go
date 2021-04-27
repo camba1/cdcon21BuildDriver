@@ -1,6 +1,12 @@
 package main
 
 import (
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/globalerrors"
+	"cdcon21builddriver/product/proto"
+	"cdcon21builddriver/product/server/statements"
+	pb "cdcon21builddriver/user/proto"
+	userSrv "cdcon21builddriver/user/proto"
 	"context"
 	"fmt"
 	adb "github.com/arangodb/go-driver"
@@ -8,12 +14,6 @@ import (
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/metadata"
 	"github.com/micro/go-micro/v2/server"
-	"goTemp/globalUtils"
-	"goTemp/globalerrors"
-	"goTemp/product/proto"
-	"goTemp/product/server/statements"
-	pb "goTemp/user/proto"
-	userSrv "goTemp/user/proto"
 	"log"
 	"os"
 	"strings"
@@ -21,9 +21,9 @@ import (
 
 const (
 	// serviceName service identifier
-	serviceName = "goTemp.api.product"
+	serviceName = "cdcon21builddriver.api.product"
 	// serviceNameUser service identifier for user service
-	serviceNameUser = "goTemp.api.user"
+	serviceNameUser = "cdcon21builddriver.api.user"
 )
 
 const (

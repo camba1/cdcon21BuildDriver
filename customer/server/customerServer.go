@@ -8,23 +8,23 @@ import (
 	"github.com/micro/go-micro/v2/client"
 	"strings"
 
+	"cdcon21builddriver/customer/proto"
+	"cdcon21builddriver/customer/server/statements"
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/globalerrors"
+	pb "cdcon21builddriver/user/proto"
+	userSrv "cdcon21builddriver/user/proto"
 	"github.com/micro/go-micro/v2/metadata"
 	"github.com/micro/go-micro/v2/server"
-	"goTemp/customer/proto"
-	"goTemp/customer/server/statements"
-	"goTemp/globalUtils"
-	"goTemp/globalerrors"
-	pb "goTemp/user/proto"
-	userSrv "goTemp/user/proto"
 	"log"
 	"os"
 )
 
 const (
 	// serviceName service identifier
-	serviceName = "goTemp.api.customer"
+	serviceName = "cdcon21builddriver.api.customer"
 	// serviceNameUser service identifier for user service
-	serviceNameUser = "goTemp.api.user"
+	serviceNameUser = "cdcon21builddriver.api.user"
 )
 
 //DB related constants

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/globalerrors"
+	"cdcon21builddriver/promotion/proto"
 	"context"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"goTemp/globalUtils"
-	"goTemp/globalerrors"
-	"goTemp/promotion/proto"
 	"testing"
 	"time"
 )

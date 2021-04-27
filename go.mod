@@ -1,4 +1,4 @@
-module goTemp
+module cdcon21builddriver
 
 go 1.16
 

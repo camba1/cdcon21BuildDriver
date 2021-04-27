@@ -1,10 +1,10 @@
 package main
 
 import (
+	"cdcon21builddriver/audit/server/statements"
+	"cdcon21builddriver/globalUtils"
 	"context"
 	"fmt"
-	"goTemp/audit/server/statements"
-	"goTemp/globalUtils"
 	"reflect"
 	"testing"
 	"time"

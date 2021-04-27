@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "goTemp/promotion/proto";
+option go_package = "cdcon21builddriver/promotion/proto";
 
 package promotion;
 

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"cdcon21builddriver/customer/proto"
+	"cdcon21builddriver/customer/server/statements"
 	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/arangodb/go-driver"
-	"goTemp/customer/proto"
-	"goTemp/customer/server/statements"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/structpb"
 	"log"

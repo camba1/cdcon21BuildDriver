@@ -1,8 +1,8 @@
 package main
 
 import (
+	pb "cdcon21builddriver/user/proto"
 	"github.com/golang/protobuf/ptypes"
-	pb "goTemp/user/proto"
 	"reflect"
 	"strings"
 	"testing"

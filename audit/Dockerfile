@@ -4,7 +4,7 @@ FROM golang AS dev
 ENV SRVDIR=audit
 
 ENV SRVNAME=${SRVDIR}Server
-WORKDIR /go/src/goTemp
+WORKDIR /go/src/cdcon21builddriver
 RUN go get github.com/githubnemo/CompileDaemon
 ENV GO111MODULE=on
 COPY ./go.mod ./go.sum ./
@@ -33,6 +33,6 @@ ENV SRVDIR=audit
 
 ENV SRVNAME=${SRVDIR}ServerAlp
 RUN apk --no-cache add ca-certificates
-WORKDIR /goTemp
-COPY --from=alpBuild /go/src/goTemp/$SRVNAME $SRVNAME
+WORKDIR /cdcon21builddriver
+COPY --from=alpBuild /go/src/cdcon21builddriver/$SRVNAME $SRVNAME
 CMD ./$SRVNAME

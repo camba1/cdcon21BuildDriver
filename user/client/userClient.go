@@ -1,19 +1,19 @@
 package main
 
 import (
+	pb "cdcon21builddriver/user/proto"
 	"context"
 	"fmt"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/metadata"
-	pb "goTemp/user/proto"
 	"log"
 	"time"
 )
 
 // serviceNameUser service identifier for user service
-const serviceNameUser = "goTemp.api.user"
+const serviceNameUser = "cdcon21builddriver.api.user"
 
 // dateLayoutISO Default time format for dates entered as strings
 const dateLayoutISO = "2006-01-02"

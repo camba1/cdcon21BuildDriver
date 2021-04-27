@@ -1,9 +1,9 @@
 package main
 
 import (
+	custServ "cdcon21builddriver/customer/proto"
 	"context"
 	"github.com/micro/go-micro/v2/client"
-	custServ "goTemp/customer/proto"
 	"log"
 )
 

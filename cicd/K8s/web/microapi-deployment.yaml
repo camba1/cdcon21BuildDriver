@@ -25,7 +25,7 @@ spec:
       - args:
         - api
         - --handler=rpc
-        - --namespace=goTemp.api
+        - --namespace=cdcon21builddriver.api
         env:
         - name: MICRO_PROFILE
           value: kubernetes

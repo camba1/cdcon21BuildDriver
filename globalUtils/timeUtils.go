@@ -1,9 +1,9 @@
 package globalUtils
 
 import (
+	"cdcon21builddriver/globalerrors"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"goTemp/globalerrors"
 	"log"
 	"time"
 )

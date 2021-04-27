@@ -1,14 +1,14 @@
 package main
 
 import (
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/globalerrors"
+	"cdcon21builddriver/promotion/proto"
+	"cdcon21builddriver/promotion/server/statements"
 	"context"
 	"errors"
 	"fmt"
 	"github.com/jackc/pgx/v4"
-	"goTemp/globalUtils"
-	"goTemp/globalerrors"
-	"goTemp/promotion/proto"
-	"goTemp/promotion/server/statements"
 	"log"
 	"time"
 )

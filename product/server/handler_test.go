@@ -1,15 +1,15 @@
 package main
 
 import (
+	"cdcon21builddriver/globalProtos"
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/product/proto"
+	"cdcon21builddriver/product/server/statements"
 	"context"
 	"encoding/base64"
 	"fmt"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/micro/go-micro/v2/metadata"
-	"goTemp/globalProtos"
-	"goTemp/globalUtils"
-	"goTemp/product/proto"
-	"goTemp/product/server/statements"
 	"log"
 	"reflect"
 	"strconv"

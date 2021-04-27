@@ -1,11 +1,11 @@
 package main
 
 import (
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/globalerrors"
 	"context"
 	"github.com/jackc/pgx/v4"
 	"github.com/micro/go-micro/v2"
-	"goTemp/globalUtils"
-	"goTemp/globalerrors"
 	"log"
 	"os"
 )
@@ -15,7 +15,7 @@ var glErr globalerrors.SrvError
 
 const (
 	//serviceName: Name of this service and which will be used for service discovery and registration
-	serviceName = "goTemp.api.audit"
+	serviceName = "cdcon21builddriver.api.audit"
 )
 
 const (

@@ -40,7 +40,7 @@ spec:
         - containerPort: 50051
         resources: {}
 #        volumeMounts:
-#        - mountPath: /go/src/goTemp/promotion/client
+#        - mountPath: /go/src/cdcon21builddriver/promotion/client
 #          name: promotioncli-claim0
       restartPolicy: Always
       serviceAccountName: ""

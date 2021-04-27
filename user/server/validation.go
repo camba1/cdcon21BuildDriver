@@ -1,10 +1,10 @@
 package main
 
 import (
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/globalerrors"
+	pb "cdcon21builddriver/user/proto"
 	"context"
-	"goTemp/globalUtils"
-	"goTemp/globalerrors"
-	pb "goTemp/user/proto"
 	"strconv"
 )
 

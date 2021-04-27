@@ -1,14 +1,14 @@
 package main
 
 import (
+	"cdcon21builddriver/audit/server/statements"
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/globalerrors"
 	"context"
 	"errors"
 	"fmt"
 	"github.com/jackc/pgx/v4"
 	"github.com/micro/go-micro/v2/broker"
-	"goTemp/audit/server/statements"
-	"goTemp/globalUtils"
-	"goTemp/globalerrors"
 	"log"
 )
 

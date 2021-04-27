@@ -1,15 +1,15 @@
 package main
 
 import (
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/globalerrors"
+	pb "cdcon21builddriver/user/proto"
+	"cdcon21builddriver/user/server/statements"
 	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
 	"github.com/jackc/pgx/v4"
-	"goTemp/globalUtils"
-	"goTemp/globalerrors"
-	pb "goTemp/user/proto"
-	"goTemp/user/server/statements"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"strconv"

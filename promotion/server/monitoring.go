@@ -1,9 +1,9 @@
 package main
 
 import (
+	"cdcon21builddriver/globalMonitoring"
 	"github.com/micro/go-micro/v2/server"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"goTemp/globalMonitoring"
 	"net/http"
 )
 

@@ -1,8 +1,8 @@
 package statements
 
 import (
+	"cdcon21builddriver/globalUtils"
 	"fmt"
-	"goTemp/globalUtils"
 	"log"
 )
 

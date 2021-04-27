@@ -1,6 +1,8 @@
 package main
 
 import (
+	"cdcon21builddriver/promotion/proto"
+	userSrv "cdcon21builddriver/user/proto"
 	"context"
 	"fmt"
 	"github.com/golang/protobuf/ptypes"
@@ -8,17 +10,15 @@ import (
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/metadata"
-	"goTemp/promotion/proto"
-	userSrv "goTemp/user/proto"
 	"log"
 	"time"
 )
 
 const (
 	// serviceName: service identifier
-	serviceName = "goTemp.api.promotion"
+	serviceName = "cdcon21builddriver.api.promotion"
 	// serviceNameUser: service identifier for user service
-	serviceNameUser = "goTemp.api.user"
+	serviceNameUser = "cdcon21builddriver.api.user"
 )
 
 // dateLayoutISO defines the default time format for dates entered as strings

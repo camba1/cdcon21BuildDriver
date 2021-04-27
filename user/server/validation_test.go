@@ -1,11 +1,11 @@
 package main
 
 import (
+	"cdcon21builddriver/globalUtils"
+	"cdcon21builddriver/globalerrors"
+	pb "cdcon21builddriver/user/proto"
 	"context"
 	"github.com/golang/protobuf/ptypes"
-	"goTemp/globalUtils"
-	"goTemp/globalerrors"
-	pb "goTemp/user/proto"
 	"testing"
 )
 

@@ -4,11 +4,11 @@
 package proto
 
 import (
+	_ "cdcon21builddriver/globalProtos"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	_ "github.com/golang/protobuf/ptypes/struct"
 	_ "github.com/golang/protobuf/ptypes/timestamp"
-	_ "goTemp/globalProtos"
 	math "math"
 )
 

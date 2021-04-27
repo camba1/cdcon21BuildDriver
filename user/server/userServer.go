@@ -1,21 +1,21 @@
 package main
 
 import (
+	"cdcon21builddriver/globalUtils"
+	pb "cdcon21builddriver/user/proto"
 	"context"
 	"fmt"
 	"github.com/jackc/pgx/v4"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/metadata"
 	"github.com/micro/go-micro/v2/server"
-	"goTemp/globalUtils"
-	pb "goTemp/user/proto"
 	"log"
 	"os"
 	"strings"
 )
 
 // serviceName service identifier
-const serviceName = "goTemp.api.user"
+const serviceName = "cdcon21builddriver.api.user"
 
 // const serviceName = "user"
 

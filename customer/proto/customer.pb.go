@@ -7,10 +7,10 @@
 package proto
 
 import (
+	globalProtos "cdcon21builddriver/globalProtos"
 	proto "github.com/golang/protobuf/proto"
 	_struct "github.com/golang/protobuf/ptypes/struct"
 	timestamp "github.com/golang/protobuf/ptypes/timestamp"
-	globalProtos "goTemp/globalProtos"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
