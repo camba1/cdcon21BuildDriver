@@ -6,12 +6,12 @@
 	import Container from 'sveltestrap/src/Container.svelte'
 
 
-	let header = "Welcome";
+	let header = "Welcome to cdCon2021";
 	let osTechList = ["GO", "go-Micro", "Svelte", "NATS"];
 	let dbTechList = ["ArangoDB", "PostgreSQL", "Redis", "TimescaleDB"];
 	let description = "This project provides a sample full stack microservices implementation.";
 	let JPinfo = {label:"Juan Peredo", address: "https://twitter.com/juanperedotech"}
-	let repo = "https://github.com/camba1/gotemp"
+	let repo = "https://github.com/camba1/cdcon21BuildDriver"
 	let frontend = {header: "Frontend", iconName: "fa-desktop", techList: ["Language: Javascript","Framework: Svelte/Sapper"]}
 	let backend = {header: "Backend", iconName: "fa-server", techList: ["Language: Go","Framework: go-Micro"]}
 	let database = {header: "Databases",
@@ -21,7 +21,7 @@
 						"Timescale: Time-series for audit data",
 						"Redis: Key-value DB for caching"
 					]}
-	let orchestration = {header: "Orchestration", iconName: "fa-cubes", techList: ["Docker","Kubernetes running in Minikube"]}
+	let orchestration = {header: "Orchestration", iconName: "fa-cubes", techList: ["BuildPacks", "Screwdriver", "Docker-compose","Kubernetes running in Minikube"]}
 	let communication = {header: "Communication", iconName: "fa-comments", techList: ["gRPC: Inter-service communication","JSON: External communication"]}
 	let other = {header: "Other",
 					iconName: "fa-book",
@@ -90,8 +90,9 @@
 				<p class="lead pmar">
 					{description}
 				</p>
-				<p class="pmar">Try exploring the application using the menu items at the top of the page. If you are curious about the tech stack, feel free to review the repo documentation for more info. <br/>
-					If you find any issues or problems please create an issue or a pull request. Contributions are most welcome.
+				<p class="pmar">This demo, which is based on my <a href="https://github.com/camba1/gotemp">goTemp</a> sample microservices app,
+					shows how to use BuildPacks and Screwdriver to accelerate development<br/>
+					The original project can be found at https://github.com/camba1/gotemp.
 				</p>
 				<p>
 					<a href="{repo}" class="btn btn-secondary mr-2">Repo</a>
