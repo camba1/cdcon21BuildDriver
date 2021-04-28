@@ -1,0 +1,33 @@
+[project]
+id = "cdcon2021gotemp" # machine readable
+name = "cdCon 2021 microservices demo" # human readable
+authors = [
+    "Juan Peredo"
+]
+source-url = "https://github.com/camba1/cdcon21BuildDriver"
+
+
+[build]
+builder = "paketobuildpacks/builder:tiny"
+exclude = [
+    "bin/*",
+    "**/*.md",
+    ".git/*",
+    ".gitignore",
+    ".idea/",
+    "arangodb/db/*",
+    "diagramsforDocs/*",
+    "postgres/postgresDB/*",
+    "timescaledb/timescaleDB/*",
+    "shellen.txt",
+    "sapper/.sessions",
+    "sapper/__sapper__/dev",
+    "sapper/node_modules",
+    "sapper/src/node_modules",
+    "vault/logs/",
+    "vault/data/",
+    "vault/keys.txt",
+    "cicd/",
+    "prometheus/",
+    "grafana/"
+]
