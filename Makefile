@@ -24,31 +24,35 @@ packbuildweb:
 	pack build cdconweb --path ./web/sapper  --builder gcr.io/buildpacks/builder:v1
 
 packbuildsrv:
-	pack build cdconusersrv --env GOOGLE_BUILDABLE=./user/server --builder gcr.io/buildpacks/builder:v1
-	pack build cdconpromotionsrv --env BP_GO_TARGETS=./promotion/server --builder paketobuildpacks/builder:tiny
-	pack build cdconproductsrv --env BP_GO_TARGETS=./product/server --builder paketobuildpacks/builder:tiny
-	pack build cdconcustomersrv --env BP_GO_TARGETS=./customer/server --builder paketobuildpacks/builder:tiny
-	pack build cdconauditsrv --env BP_GO_TARGETS=./audit/server --builder paketobuildpacks/builder:tiny
+	pack build cdconusersrv --env BP_GO_TARGETS=./user/server
+	pack build cdconpromotionsrv --env BP_GO_TARGETS=./promotion/server
+	pack build cdconproductsrv --env BP_GO_TARGETS=./product/server
+	pack build cdconcustomersrv --env BP_GO_TARGETS=./customer/server
+	pack build cdconauditsrv --env BP_GO_TARGETS=./audit/server
 
 packbuildtestlclients:
-	pack build cdconusercli --env GOOGLE_BUILDABLE=./user/client --builder gcr.io/buildpacks/builder:v1
-	pack build cdconpromotioncli --env BP_GO_TARGETS=./promotion/client --builder paketobuildpacks/builder:tiny
-	pack build cdconproductcli --env BP_GO_TARGETS=./product/client --builder paketobuildpacks/builder:tiny
-	pack build cdconcustomercli --env BP_GO_TARGETS=./customer/client --builder paketobuildpacks/builder:tiny
+	pack build cdconusercli --env BP_GO_TARGETS=./user/client
+	pack build cdconpromotioncli --env BP_GO_TARGETS=./promotion/client
+	pack build cdconproductcli --env BP_GO_TARGETS=./product/client
+	pack build cdconcustomercli --env BP_GO_TARGETS=./customer/client
 
 # Running individual services examples
 
-# Build and start service
-packbuildpromosrv:
-	pack build cdconpromotionsrv --env BP_GO_TARGETS=./promotion/server --builder paketobuildpacks/builder:tiny
-pacrunpromosrv:
-	docker-compose up promotionsrv
+# Build and start service (SERVICE value should be lowercase)
+buildsrvdev:
+	pack build cdcon$(SERVICE)srv --env GOOGLE_BUILDABLE=./$$SERVICE/server --builder gcr.io/buildpacks/builder:v1
+buildsrv:
+	pack build cdcon$(SERVICE)srv --env BP_GO_TARGETS=./$$SERVICE/server
+runsrv:
+	docker-compose up $(SERVICE)srv
 
-# Build and start testing client
-pacbuildpromocli:
-	pack build cdconpromotioncli --env BP_GO_TARGETS=./promotion/client --builder paketobuildpacks/builder:tiny
-docrunpromocli:
-	docker-compose up promotioncli
+# Build and start testing client (SERVICE value should be lower case)
+buildclidev:
+	pack build cdcon$(SERVICE)cli --env GOOGLE_BUILDABLE=./$$SERVICE/client --builder gcr.io/buildpacks/builder:v1
+buildcli:
+	pack build cdcon$(SERVICE)cli --env BP_GO_TARGETS=./$(SERVICE)/client
+runcli:
+	docker-compose up $(SERVICE)cli
 
 #DockerHub
 hubpush:
@@ -59,6 +63,8 @@ hubpush:
 
 hubpushweb:
 	echo "no implemented yet"
+	#npm run build  --prefix web/sapper
+	#pack build cdconweb --path ./web/sapper  --builder gcr.io/buildpacks/builder:v1
 
 #hubpushcontext:
 #	docker build -t $$SERVICE -f  ./$$FOLDER/Dockerfile ./$$FOLDER
