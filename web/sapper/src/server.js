@@ -7,8 +7,10 @@ import sessionFileStore from 'session-file-store';
 
 const FileStore = sessionFileStore(session);
 
-const { PORT, NODE_ENV } = process.env;
+const { PORT, NODE_ENV, APIURL } = process.env;
 const dev = NODE_ENV === 'development';
+
+console.log(APIURL);
 
 //TODO: Change this to read from environment variable
 const mySecret = 'TestDB@home2'
@@ -30,7 +32,8 @@ polka() // You can also use Express
 		sirv('static', { dev }),
 		sapper.middleware({
 			session: (req, res) => ({
-				user: req.session && req.session.user
+				user: req.session && req.session.user,
+				apiUrl: APIURL
 			})})
 	)
 	.listen(PORT, err => {
