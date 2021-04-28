@@ -321,14 +321,16 @@ Each one of the services has a similar structure:
 
 #### Building
 
-The different service's images can be built from the root of the repo using the docker build command. 
+The different service's images can be built from the root of the repo. 
 For example the user service can be built using:
 
-`pack build cdconusersrv --env GOOGLE_BUILDABLE=./user/server --builder gcr.io/buildpacks/builder:v1 `
+`make buildsrv SERVICE=user`
 
-Alternatively, a different pack can be used to create a samller image if needed:
+The SERVICE parameter refers to the name of the folder containing the particular service to be built. 
+The above command builds the tiny version of the service.
+Alternatively, a larger image can be built for debugging if needed:
 
-`pack build cdconproductsrv --env BP_GO_TARGETS=./product/server --builder paketobuildpacks/builder:tiny`
+`make buildsrvdev SERVICE=user`
 
 #### Running individual services
 
@@ -347,6 +349,10 @@ The server user service will update the DB as necessary and send the updated inf
 the audit service may eventually store it in the time series DB. The audit service can be started using:
 
 `docker-compose up auditsrv`
+
+The makefile shortcut for the above command is:
+
+`make runsrv SERVICE=audit`
 
 ### Databases Initialization
 
