@@ -36,7 +36,7 @@ jobs:
      - npminstall: npm install
      - checkEnv: echo $APIURL
      - buildapp: npm run build
-     - checkBuild: echo $(ls -l __sapper__/build)
+#     - checkBuild: echo $(ls -l __sapper__/build)
   buildImage:
     image: docker
     annotations:
@@ -47,9 +47,11 @@ jobs:
       - dockerHost: echo $DOCKER_HOST
       - dockerCheck: docker version
       - changedir: cd web
-      - checkSourceDir: echo $SD_SOURCE_DIR
-      - checkBuild: echo $(ls -l sapper/__sapper__/build)
-      - buildImg: docker build -t cdconweb .
+      - checkSourceDir: echo $(ls $SD_SOURCE_DIR)
+      - checkBuild: echo $(ls $SD_SOURCE_DIR/web/sapper/__sapper__/build)
+#      - buildImg: docker build -t cdconweb .
+
+
     # enable secrets used in this pipeline
 #    secrets:
 #      - TEST_SECRET
