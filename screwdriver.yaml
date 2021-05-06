@@ -18,6 +18,9 @@ parameters:
   param2:
     value: "value2"
     description: "param2 rocks!"
+cache:
+  event: [$SD_SOURCE_DIR/web/sapper/__sapper__/build]
+
 # Jobs definition block
 jobs:
   main:
@@ -42,6 +45,7 @@ jobs:
     steps:
       - dockerHost: echo $DOCKER_HOST
       - dockerCheck: docker version
+      - changedir: cd web/sapper
       - checkBuild: echo $(ls -l __sapper__/build)
       - buildImg: docker build -t cdconweb .
     # enable secrets used in this pipeline
