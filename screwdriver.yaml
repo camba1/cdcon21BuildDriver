@@ -19,7 +19,8 @@ parameters:
     value: "value2"
     description: "param2 rocks!"
 cache:
-  event: [$SD_SOURCE_DIR/web/sapper/__sapper__/build]
+  pipeline:
+    - $SD_SOURCE_DIR/web/sapper/__sapper__/build
 
 
 # Jobs definition block
