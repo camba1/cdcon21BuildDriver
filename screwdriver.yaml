@@ -36,6 +36,7 @@ jobs:
      - npminstall: npm install
      - checkEnv: echo $APIURL
      - buildapp: npm run build
+     - checkBuild: echo $(ls $SD_SOURCE_DIR/web/sapper/__sapper__/build)
 #     - checkBuild: echo $(ls -l __sapper__/build)
   buildImage:
     image: docker
