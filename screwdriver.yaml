@@ -21,6 +21,7 @@ parameters:
 cache:
   event: [$SD_SOURCE_DIR/web/sapper/__sapper__/build]
 
+
 # Jobs definition block
 jobs:
   main:
@@ -45,8 +46,9 @@ jobs:
     steps:
       - dockerHost: echo $DOCKER_HOST
       - dockerCheck: docker version
-      - changedir: cd web/sapper
-      - checkBuild: echo $(ls -l __sapper__/build)
+      - changedir: cd web
+      - checkSourceDir: echo $SD_SOURCE_DIR
+      - checkBuild: echo $(ls -l sapper/__sapper__/build)
       - buildImg: docker build -t cdconweb .
     # enable secrets used in this pipeline
 #    secrets:
