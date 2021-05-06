@@ -34,11 +34,14 @@ jobs:
      - buildapp: npm run build
      - checkBuild: echo $(ls -l __sapper__/build)
   buildImage:
+    image: docker
     annotations:
       screwdriver.cd/dockerEnabled: true
     requires:
       - main
     steps:
+      - dockerHost: echo $DOCKER_HOST
+      - dockerCheck: docker version
       - checkBuild: echo $(ls -l __sapper__/build)
       - buildImg: docker build -t cdconweb .
     # enable secrets used in this pipeline
