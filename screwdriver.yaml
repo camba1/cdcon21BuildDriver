@@ -28,11 +28,11 @@ jobs:
       - ~pr
       - ~commit
     steps:
-     changedir: cd web/sapper
-     npminstall: npm install
-     checkEnv: echo $APIURL
-     buildapp: npm run build
-     checkBuild: echo $(ls -l __sapper__/build)
+     - changedir: cd web/sapper
+     - npminstall: npm install
+     - checkEnv: echo $APIURL
+     - buildapp: npm run build
+     - checkBuild: echo $(ls -l __sapper__/build)
 
     # enable secrets used in this pipeline
 #    secrets:
