@@ -1,0 +1,59 @@
+---
+# Shared definition block
+# This is where you would define any attributes that all your jobs will
+# inherit.
+shared:
+  # A map of environment variables that we want to set
+  environment:
+    GOPATH: /sd/workspace
+    APIURL: 'http://localhost:8080/'
+  # annotations to control amount of cpu and ram used
+  annotations:
+    screwdriver.cd/cpu: micro
+    screwdriver.cd/ram: micro
+# Parameters that can be used in steps, the values provided are defaults
+# and can be overridden in the gui at build time
+parameters:
+  param1: "value1"
+  param2:
+    value: "value2"
+    description: "param2 rocks!"
+# Jobs definition block
+jobs:
+  main:
+    annotations:
+      screwdriver.cd/dockerEnabled: false
+    image: node
+    requires:
+      - ~pr
+      - ~commit
+    steps:
+     changedir: cd web/sapper
+     npminstall: npm install
+     checkEnv: echo $APIURL
+     buildapp: npm run build
+     checkBuild: echo $(ls -l __sapper__/build)
+
+    # enable secrets used in this pipeline
+#    secrets:
+#      - TEST_SECRET
+    # setup email notifications
+  #    settings:
+  #      email:
+  #        addresses: [ info@test.bi ]
+  #        statuses: [ SUCCESS, FAILURE ]
+#  sequential:
+#    image: node
+#    requires:
+#      - main
+#    steps:
+#      - ls: echo $(ls)
+#      - parms: 'echo "Param1 $(meta get parameters.param1), Param2 $(meta get parameters.param2.value)"'
+#  parallel:
+#    image: node
+#    requires:
+#      - ~pr
+#      - ~commit
+#    steps:
+#      - ls: echo $(ls)
+#      - parms: 'echo "Param1 $(meta get parameters.param1), Param2 $(meta get parameters.param2.value)"'
