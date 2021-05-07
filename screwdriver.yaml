@@ -3,17 +3,19 @@
 # This is where you would define any attributes that all your jobs will
 # inherit.
 shared:
-  # A map of environment variables that we want to set
+  # Common env vars
   environment:
     GOPATH: /sd/workspace
     GO111MODULE: on
   # annotations to control amount of cpu and ram used
   annotations:
-    # screwdriver.cd/dockerEnabled: true
     screwdriver.cd/cpu: micro
     screwdriver.cd/ram: micro
+
+# Event cache shares data between jobs
 cache:
   event: [/sd/workspace/pkg/mod]
+
 # Jobs definition block
 jobs:
   main:
@@ -30,18 +32,19 @@ jobs:
       - "globalProtos"
       - "globalUtils/"
     steps:
+      # Check if the cache dir exists
+      - checkCacheDir: ls /sd/workspace
       # This step downloads and installs packages and dependencies
       - download: go mod download
       - cd: cd promotion/server
-      - ls: ls /sd/workspace/pkg/mod
-      #  The "vet" step runs the go tool vet on packages
+      #  Validate code
       # - vet: go -x vet ./...
-      # This step runs gofmt on package resources
+      # Format code
       - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
-      #  The "test" step tests the packages
+      #  Run tests
       - test: go test .
-      #      # Compiles the packages and dependencies
-#      - build: go build -o promotionsrv -a ./...
+      #  Compile binary
+      - build: go build -o promotionsrv .
   useTemplate:
     annotations:
       screwdriver.cd/dockerEnabled: false
@@ -53,8 +56,10 @@ jobs:
       - "globalMonitoring"
       - "globalProtos"
       - "globalUtils/"
+    # Use the steps from this template
     template: bolbeck/goinit@1.0.1
     steps:
+      # steps that will run before/after certain template steps
       - predownload: ls /sd/workspace/pkg/mod
       - pregofmt: cd promotion/server
       - posttest: go build -o promotionsrv .
