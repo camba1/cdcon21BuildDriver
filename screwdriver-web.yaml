@@ -38,7 +38,7 @@ jobs:
       # Enable docker in docker to allow image building
       screwdriver.cd/dockerEnabled: true
     requires:
-      # Must wait unitl main finishes to run
+      # Must wait until main finishes to run
       - main
     steps:
       #check parameters and secrets values
