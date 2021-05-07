@@ -5,58 +5,51 @@
 shared:
   # A map of environment variables that we want to set
   environment:
-    APIURL: 'http://localhost:8080/'
+    GOPATH: /sd/workspace
   # annotations to control amount of cpu and ram used
   annotations:
+    # screwdriver.cd/dockerEnabled: true
     screwdriver.cd/cpu: micro
     screwdriver.cd/ram: micro
-# Parameters that can be used in steps, the values provided are defaults
-# and can be overridden in the gui at build time
-parameters:
-  param1:
-    value: "Param1 Rocks"
-
 # Jobs definition block
 jobs:
   main:
     annotations:
       screwdriver.cd/dockerEnabled: false
-    image: node
+    image: golang
     requires:
       - ~pr
       - ~commit
+    sourcePaths:
+      - "promotion/server/"
+      - "globalerrors/"
+      - "globalMonitoring"
+      - "globalProtos"
+      - "globalUtils/"
     steps:
-     # Build app & test it
-     - changedir: cd web/sapper
-     - npminstall: npm install
-     - checkEnv: echo $APIURL
-#     - test: npm run test
-     - buildapp: npm run build
-  buildImage:
-    image: docker
+      - cd: cd user/promotion
+      # This step downloads and installs packages and dependencies
+      - get: go get -t ./...
+      #      # The "vet" step runs the go tool vet on packages
+      - vet: go vet ./...
+      #      # This step runs gofmt on package resources
+      - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
+      #      # The "test" step tests the packages
+      - test: go test ./...
+      #      # Compiles the packages and dependencies
+#      - build: go build -o promotionsrv -a ./...
+  useTemplate:
     annotations:
-      # Enable docker in docker to allow image building
-      screwdriver.cd/dockerEnabled: true
+      screwdriver.cd/dockerEnabled: false
     requires:
-      # Must wait unitl main finishes to run
       - main
+    sourcePaths:
+      - "promotion/server/"
+      - "globalerrors/"
+      - "globalMonitoring"
+      - "globalProtos"
+      - "globalUtils/"
+    template: bolbeck/goinit@1.0.0
     steps:
-      #check parameters and secrets values
-      - parmValue: 'echo "Param1 $(meta get parameters.param1.value)"'
-      - secretValue: echo $TEST_SECRET
-      # access to the docker is using this address
-      - dockerHost: echo $DOCKER_HOST
-      - dockerCheck: docker version
-      - changedir: cd web
-#      - buildImg: docker build -t cdconweb .
-    # enable secrets used in this pipeline
-    secrets:
-      - TEST_SECRET
-
-# Enable a job that runs in parallel to buildImage job
-#  parallel:
-#    image: node
-#    requires:
-#      - main
-#    steps:
-#      - ls: echo $(ls)
+      - preChangeDir: cd user/promotion
+      - postBuildImg: go build -o promotionsrv -a ./...
