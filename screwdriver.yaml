@@ -50,7 +50,7 @@ jobs:
       - "globalMonitoring"
       - "globalProtos"
       - "globalUtils/"
-    template: bolbeck/goinit@1.0.0
+    template: bolbeck/goinit@1.0.1
     steps:
       - pregofmt: cd promotion/server
       - posttest: go build -o promotionsrv -a ./...
