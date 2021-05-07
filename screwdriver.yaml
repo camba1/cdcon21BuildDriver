@@ -52,5 +52,5 @@ jobs:
       - "globalUtils/"
     template: bolbeck/goinit@1.0.0
     steps:
-      - preChangeDir: cd promotion/server
-      - postBuildImg: go build -o promotionsrv -a ./...
+      - pregofmt: cd promotion/server
+      - posttest: go build -o promotionsrv -a ./...
