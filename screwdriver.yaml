@@ -22,6 +22,8 @@ cache:
 # Jobs definition block
 jobs:
   main:
+    annotations:
+      screwdriver.cd/dockerEnabled: false
     image: golang
     # Check if runs required on each pr or commit
     requires:
@@ -49,6 +51,8 @@ jobs:
       #  Compile binary
       - build: go build -o promotionsrv .
   useTemplate:
+    annotations:
+      screwdriver.cd/dockerEnabled: false
     requires:
       - main
     sourcePaths:
