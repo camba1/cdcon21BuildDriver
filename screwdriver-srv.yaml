@@ -1,0 +1,55 @@
+---
+# Shared definition block
+# This is where you would define any attributes that all your jobs will
+# inherit.
+shared:
+  # A map of environment variables that we want to set
+  environment:
+    GOPATH: /sd/workspace
+  # annotations to control amount of cpu and ram used
+  annotations:
+    # screwdriver.cd/dockerEnabled: true
+    screwdriver.cd/cpu: micro
+    screwdriver.cd/ram: micro
+# Jobs definition block
+jobs:
+  main:
+    annotations:
+      screwdriver.cd/dockerEnabled: false
+    image: golang
+    requires:
+      - ~pr
+      - ~commit
+    sourcePaths:
+      - "promotion/server/"
+      - "globalerrors/"
+      - "globalMonitoring"
+      - "globalProtos"
+      - "globalUtils/"
+    steps:
+      - cd: cd user/promotion
+    # This step downloads and installs packages and dependencies
+      - get: go get -t ./...
+#      # The "vet" step runs the go tool vet on packages
+      - vet: go vet ./...
+#      # This step runs gofmt on package resources
+      - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
+#      # The "test" step tests the packages
+      - test: go test ./...
+#      # Compiles the packages and dependencies
+      - build: go build -o promotionsrv -a ./...
+  useTemplate:
+    annotations:
+      screwdriver.cd/dockerEnabled: false
+    requires:
+      - main
+    sourcePaths:
+      - "promotion/server/"
+      - "globalerrors/"
+      - "globalMonitoring"
+      - "globalProtos"
+      - "globalUtils/"
+    template: bolbeck/goinit@1.0.0
+    steps:
+      - preChangeDir: cd user/promotion
+      - postBuildImg: go build -o promotionsrv -a ./...
