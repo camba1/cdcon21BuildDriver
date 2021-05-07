@@ -1,4 +1,9 @@
 ---
+
+parameters:
+  servname:
+    value: "promotion"
+
 # Shared definition block
 # This is where you would define any attributes that all your jobs will
 # inherit.
@@ -7,6 +12,7 @@ shared:
   environment:
     GOPATH: /sd/workspace
     GO111MODULE: on
+    SERVNAME: $(meta get parameters.servname.value)
   # annotations to control amount of cpu and ram used
   annotations:
     screwdriver.cd/cpu: micro
@@ -32,6 +38,7 @@ jobs:
       - "globalProtos"
       - "globalUtils/"
     steps:
+      - echo: echo $SERVNAME
       # Check if the cache dir exists
       - checkCacheDir: ls /sd/workspace
       # This step downloads and installs packages and dependencies
