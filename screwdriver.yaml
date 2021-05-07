@@ -32,7 +32,7 @@ jobs:
       - download: go mod download
       - cd: cd promotion/server
       #  The "vet" step runs the go tool vet on packages
-      - vet: go -x vet ./...
+#      - vet: go -x vet ./...
       # This step runs gofmt on package resources
       - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
       #  The "test" step tests the packages
