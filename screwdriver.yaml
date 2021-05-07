@@ -30,8 +30,8 @@ jobs:
      - changedir: cd web/sapper
      - npminstall: npm install
      - checkEnv: echo $APIURL
+#     - test: npm run test
      - buildapp: npm run build
-     - test: npm run test
   buildImage:
     image: docker
     annotations:
