@@ -91,7 +91,7 @@
 					{description}
 				</p>
 				<p class="pmar">This demo, which is based on my <a href="https://github.com/camba1/gotemp">goTemp</a> sample microservices app,
-					shows how to use BuildPacks and Screwdriver to accelerate development<br/>
+					shows how to use <b>BuildPacks</b> and <b>Screwdriver</b> to accelerate development<br/>
 					The original project can be found at https://github.com/camba1/gotemp.
 				</p>
 				<p>
