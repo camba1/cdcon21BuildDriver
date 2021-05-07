@@ -28,8 +28,8 @@ jobs:
       - "globalUtils/"
     steps:
       # This step downloads and installs packages and dependencies
-      - get: go get -t ./...
-      #      # The "vet" step runs the go tool vet on packages
+      - download: go mod download
+      #  The "vet" step runs the go tool vet on packages
       - vet: go vet ./...
       #      # This step runs gofmt on package resources
       - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
