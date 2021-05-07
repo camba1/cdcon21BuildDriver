@@ -31,8 +31,9 @@ jobs:
       # This step downloads and installs packages and dependencies
       - download: go mod download
       - cd: cd promotion/server
+      - ls: /sd/workspace/pkg/mod
       #  The "vet" step runs the go tool vet on packages
-#      - vet: go -x vet ./...
+      # - vet: go -x vet ./...
       # This step runs gofmt on package resources
       - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
       #  The "test" step tests the packages
@@ -53,4 +54,4 @@ jobs:
     template: bolbeck/goinit@1.0.1
     steps:
       - pregofmt: cd promotion/server
-      - posttest: go build -o promotionsrv -a ./...
+      - posttest: go build -o promotionsrv .
