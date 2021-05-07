@@ -6,6 +6,7 @@ shared:
   # A map of environment variables that we want to set
   environment:
     GOPATH: /sd/workspace
+    GO111MODULE: on
   # annotations to control amount of cpu and ram used
   annotations:
     # screwdriver.cd/dockerEnabled: true
@@ -29,12 +30,12 @@ jobs:
     steps:
       # This step downloads and installs packages and dependencies
       - download: go mod download
+      - cd: cd promotion/server
       #  The "vet" step runs the go tool vet on packages
       - vet: go vet ./...
-      #      # This step runs gofmt on package resources
+      # This step runs gofmt on package resources
       - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
-      #      # The "test" step tests the packages
-      - cd: cd promotion/server
+      #  The "test" step tests the packages
       - test: go test ./...
       #      # Compiles the packages and dependencies
 #      - build: go build -o promotionsrv -a ./...
