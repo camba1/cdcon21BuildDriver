@@ -29,9 +29,9 @@ jobs:
       - "globalUtils/"
     steps:
       # This step downloads and installs packages and dependencies
-      - download: go mod download
+#      - download: go mod download
       - cd: cd promotion/server
-      - ls: /sd/workspace/pkg/mod
+      - ls: ls /sd/workspace/pkg/mod
       #  The "vet" step runs the go tool vet on packages
       # - vet: go -x vet ./...
       # This step runs gofmt on package resources
