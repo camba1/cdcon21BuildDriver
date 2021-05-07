@@ -26,6 +26,7 @@ jobs:
       - ~pr
       - ~commit
     steps:
+     # Build app & test it
      - changedir: cd web/sapper
      - npminstall: npm install
      - checkEnv: echo $APIURL
@@ -34,12 +35,16 @@ jobs:
   buildImage:
     image: docker
     annotations:
+      # Enable docker in docker to allow image building
       screwdriver.cd/dockerEnabled: true
     requires:
+      # Must wait unitl main finishes to run
       - main
     steps:
+      #check parameters and secrets values
       - parmValue: 'echo "Param1 $(meta get parameters.param1.value)"'
       - secretValue: echo $TEST_SECRET
+      # access to the docker is using this address
       - dockerHost: echo $DOCKER_HOST
       - dockerCheck: docker version
       - changedir: cd web
@@ -47,10 +52,11 @@ jobs:
     # enable secrets used in this pipeline
     secrets:
       - TEST_SECRET
+
+# Enable a job that runs in parallel to buildImage job
 #  parallel:
 #    image: node
 #    requires:
-#      - ~pr
-#      - ~commit
+#      - main
 #    steps:
 #      - ls: echo $(ls)
