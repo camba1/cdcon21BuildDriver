@@ -30,7 +30,7 @@ jobs:
       - npminstall: npm install
       - checkEnv: echo $APIURL
       - buildapp: npm run build
-      - echo: echo $(ls /sd/workspace/web/sapper)
+      - echo: echo $(ls web/sapper)
   buildImage:
     image: docker
     annotations:
@@ -44,7 +44,7 @@ jobs:
       - DOCKER_LOGIN_NAME
       - DOCKER_LOGIN_PWD
     steps:
-      - echo: echo $(ls /sd/workspace/web/sapper)
+      - echo: echo $(ls web/sapper)
       - secretValue: echo $DOCKER_LOGIN_NAME
       # access to the docker is using this address
       - dockerHost: echo $DOCKER_HOST
