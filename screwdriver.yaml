@@ -13,7 +13,7 @@ shared:
 
 # Event cache shares data between jobs
 cache:
-  event: [web/sapper/__sapper__/build]
+  event: [$SD_SOURCE_DIR/web/sapper/__sapper__/build]
 
 # Jobs definition block
 jobs:
@@ -30,7 +30,7 @@ jobs:
       - npminstall: npm install
       - checkEnv: echo $APIURL
       - buildapp: npm run build
-      - echo: echo $(ls web/sapper)
+      - echo: echo $(ls $SD_SOURCE_DIR/web/sapper/__sapper__/build)
   buildImage:
     image: docker
     annotations:
