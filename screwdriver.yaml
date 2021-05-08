@@ -13,7 +13,7 @@ shared:
 
 # Event cache shares data between jobs
 cache:
-  event: [/sd/workspace/web/sapper/__sapper__/build]
+  event: [web/sapper/__sapper__/build]
 
 # Jobs definition block
 jobs:
@@ -30,6 +30,7 @@ jobs:
       - npminstall: npm install
       - checkEnv: echo $APIURL
       - buildapp: npm run build
+      - echo: echo $(ls /sd/workspace/web/sapper)
   buildImage:
     image: docker
     annotations:
@@ -43,8 +44,7 @@ jobs:
       - DOCKER_LOGIN_NAME
       - DOCKER_LOGIN_PWD
     steps:
-      - echo: echo $(ls /sd/workspace/web/sapper/__sapper__/build)
-      - buildapp: npm run build
+      - echo: echo $(ls /sd/workspace/web/sapper)
       - secretValue: echo $DOCKER_LOGIN_NAME
       # access to the docker is using this address
       - dockerHost: echo $DOCKER_HOST
