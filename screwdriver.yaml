@@ -3,48 +3,24 @@
 # This is where you would define any attributes that all your jobs will
 # inherit.
 shared:
-  # A map of environment variables that we want to set
-  environment:
-    APIURL: 'http://localhost:8080/'
   # annotations to control amount of cpu and ram used
   annotations:
-    screwdriver.cd/cpu: micro
-    screwdriver.cd/ram: micro
-
-# Event cache shares data between jobs
-cache:
-  event: [$SD_SOURCE_DIR/web/sapper/__sapper__/build]
+    screwdriver.cd/cpu: MICRO
+    screwdriver.cd/ram: MICRO
 
 # Jobs definition block
 jobs:
   main:
-    annotations:
-      screwdriver.cd/dockerEnabled: false
-    image: node
-    requires:
-      - ~pr
-      - ~commit
-    steps:
-      # Build app & test it
-      - changedir: cd web/sapper
-      - npminstall: npm install
-      - checkEnv: echo $APIURL
-      - buildapp: npm run build
-      - echo: echo $(ls $SD_SOURCE_DIR/web/sapper/__sapper__/build)
-  buildImage:
     image: docker
+#    requires: [useTemplate]
     annotations:
       # Enable docker in docker to allow image building
       screwdriver.cd/dockerEnabled: true
-    requires:
-      # Must wait until main finishes to run
-      - main
     # enable secrets used in this pipeline
     secrets:
       - DOCKER_LOGIN_NAME
       - DOCKER_LOGIN_PWD
     steps:
-      - echo: echo $(ls web/sapper)
       - secretValue: echo $DOCKER_LOGIN_NAME
       # access to the docker is using this address
       - dockerHost: echo $DOCKER_HOST
@@ -52,12 +28,3 @@ jobs:
       - buildImg: docker build -t bolbeck/cdconweb -f  ./web/Dockerfile ./web
       - dockerlogin: docker login -u $DOCKER_LOGIN_NAME -p $DOCKER_LOGIN_PWD
       - publish: docker push bolbeck/cdconweb
-
-
-# Enable a job that runs in parallel to buildImage job
-#  parallel:
-#    image: node
-#    requires:
-#      - main
-#    steps:
-#      - ls: echo $(ls)
