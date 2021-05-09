@@ -13,6 +13,7 @@ jobs:
   main:
     image: docker
 #    requires: [useTemplate]
+    requires: [~pr, ~commit]
     annotations:
       # Enable docker in docker to allow image building
       screwdriver.cd/dockerEnabled: true
