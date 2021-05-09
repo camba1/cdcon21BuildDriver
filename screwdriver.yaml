@@ -55,7 +55,7 @@ jobs:
   webImage:
     image: docker
     #    requires: [useTemplate]
-    requires: [useTemplate]
+    requires: [customer]
     #    sourcePaths: ["web/sapper/"]
     annotations:
       # Enable docker in docker to allow image building
