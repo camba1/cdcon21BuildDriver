@@ -42,7 +42,7 @@ jobs:
       - test: go test .
       #  Compile binary
       - build: go build -o promotionsrv .
-  useTemplate:
+  customer:
     requires:
       - main
     # Use the steps from this template
