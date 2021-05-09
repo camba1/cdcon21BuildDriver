@@ -3,60 +3,29 @@
 # This is where you would define any attributes that all your jobs will
 # inherit.
 shared:
-  # A map of environment variables that we want to set
-  environment:
-    APIURL: 'http://localhost:8080/'
   # annotations to control amount of cpu and ram used
   annotations:
-    screwdriver.cd/cpu: micro
-    screwdriver.cd/ram: micro
-# Parameters that can be used in steps, the values provided are defaults
-# and can be overridden in the gui at build time
-parameters:
-  param1:
-    value: "Param1 Rocks"
+    screwdriver.cd/cpu: MICRO
+    screwdriver.cd/ram: MICRO
 
 # Jobs definition block
 jobs:
   main:
-    annotations:
-      screwdriver.cd/dockerEnabled: false
-    image: node
-    requires:
-      - ~pr
-      - ~commit
-    steps:
-      # Build app & test it
-      - changedir: cd web/sapper
-      - npminstall: npm install
-      - checkEnv: echo $APIURL
-      #     - test: npm run test
-      - buildapp: npm run build
-  buildImage:
     image: docker
+    #    requires: [useTemplate]
+    requires: [~pr, ~commit]
     annotations:
       # Enable docker in docker to allow image building
       screwdriver.cd/dockerEnabled: true
-    requires:
-      # Must wait until main finishes to run
-      - main
+    # enable secrets used in this pipeline
+    secrets:
+      - DOCKER_LOGIN_NAME
+      - DOCKER_LOGIN_PWD
     steps:
-      #check parameters and secrets values
-      - parmValue: 'echo "Param1 $(meta get parameters.param1.value)"'
-      - secretValue: echo $TEST_SECRET
+      - secretValue: echo $DOCKER_LOGIN_NAME
       # access to the docker is using this address
       - dockerHost: echo $DOCKER_HOST
       - dockerCheck: docker version
-      - changedir: cd web
-    #      - buildImg: docker build -t cdconweb .
-    # enable secrets used in this pipeline
-    secrets:
-      - TEST_SECRET
-
-# Enable a job that runs in parallel to buildImage job
-#  parallel:
-#    image: node
-#    requires:
-#      - main
-#    steps:
-#      - ls: echo $(ls)
+      - buildImg: docker build -t bolbeck/cdconweb -f  ./web/Dockerfile ./web
+      - dockerlogin: docker login -u $DOCKER_LOGIN_NAME -p $DOCKER_LOGIN_PWD
+      - publish: docker push bolbeck/cdconweb
