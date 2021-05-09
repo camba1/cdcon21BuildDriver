@@ -56,15 +56,14 @@ runcli:
 
 #DockerHub
 hubpush:
-	echo "no implemented yet"
-#	docker build -t $$SERVICE -f  $$FOLDER/Dockerfile .
-#	docker tag $$SERVICE bolbeck/gotemp_$$SERVICE
-#	docker push bolbeck/gotemp_$$SERVICE
+	pack build bolbeck/cdcon$(SERVICE)srv --env BP_GO_TARGETS=./$$SERVICE/server
+	docker push bolbeck/cdcon$(SERVICE)srv
 
 hubpushweb:
-	echo "no implemented yet"
-	#npm run build  --prefix web/sapper
-	#pack build cdconweb --path ./web/sapper  --builder gcr.io/buildpacks/builder:v1
+	#echo "no implemented yet"
+	APIURL='http://localhost:8080/' npm run build  --prefix web/sapper
+	pack build bolbeck/cdconweb --path ./web/sapper  --builder gcr.io/buildpacks/builder:v1
+	docker push bolbeck/cdconweb
 
 #hubpushcontext:
 #	docker build -t $$SERVICE -f  ./$$FOLDER/Dockerfile ./$$FOLDER
