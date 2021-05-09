@@ -52,23 +52,23 @@ jobs:
       - predownload: ls /sd/workspace/pkg/mod
       - pregofmt: cd promotion/server
       - posttest: go build -o promotionsrv .
-  webImage:
-    image: docker
-    #    requires: [useTemplate]
-    requires: [useTemplate]
-    #    sourcePaths: ["web/sapper/"]
-    annotations:
-      # Enable docker in docker to allow image building
-      screwdriver.cd/dockerEnabled: true
-    # enable secrets used in this pipeline
-    secrets:
-      - DOCKER_LOGIN_NAME
-      - DOCKER_LOGIN_PWD
-    steps:
-      - secretValue: echo $DOCKER_LOGIN_NAME
-      # access to the docker is using this address
-      - dockerHost: echo $DOCKER_HOST
-      - dockerCheck: docker version
-      - buildImg: docker build -t bolbeck/cdconweb -f  ./web/Dockerfile ./web
-      - dockerlogin: docker login -u $DOCKER_LOGIN_NAME -p $DOCKER_LOGIN_PWD
-      - publish: docker push bolbeck/cdconweb
+#  webImage:
+#    image: docker
+#    #    requires: [useTemplate]
+#    requires: [useTemplate]
+#    #    sourcePaths: ["web/sapper/"]
+#    annotations:
+#      # Enable docker in docker to allow image building
+#      screwdriver.cd/dockerEnabled: true
+#    # enable secrets used in this pipeline
+#    secrets:
+#      - DOCKER_LOGIN_NAME
+#      - DOCKER_LOGIN_PWD
+#    steps:
+#      - secretValue: echo $DOCKER_LOGIN_NAME
+#      # access to the docker is using this address
+#      - dockerHost: echo $DOCKER_HOST
+#      - dockerCheck: docker version
+#      - buildImg: docker build -t bolbeck/cdconweb -f  ./web/Dockerfile ./web
+#      - dockerlogin: docker login -u $DOCKER_LOGIN_NAME -p $DOCKER_LOGIN_PWD
+#      - publish: docker push bolbeck/cdconweb
