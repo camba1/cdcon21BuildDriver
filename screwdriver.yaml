@@ -7,9 +7,9 @@ shared:
     GO111MODULE: on
 
   # annotations to control amount of cpu and ram used
-  annotations:
-    screwdriver.cd/cpu: MICRO
-    screwdriver.cd/ram: MICRO
+#  annotations:
+#    screwdriver.cd/cpu: MICRO
+#    screwdriver.cd/ram: MICRO
 
 # Event cache shares data between jobs
 cache:
