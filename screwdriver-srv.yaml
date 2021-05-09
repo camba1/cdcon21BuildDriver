@@ -12,8 +12,8 @@ shared:
 
   # annotations to control amount of cpu and ram used
   annotations:
-    screwdriver.cd/cpu: micro
-    screwdriver.cd/ram: micro
+    screwdriver.cd/cpu: MICRO
+    screwdriver.cd/ram: MICRO
 
 # Event cache shares data between jobs
 cache:
