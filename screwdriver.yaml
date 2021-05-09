@@ -39,7 +39,7 @@ jobs:
       # Format code
       - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
       #  Run tests
-      #- test: go test .
+      - test: go test .
       #  Compile binary
       - build: go build -o promotionsrv .
   useTemplate:
