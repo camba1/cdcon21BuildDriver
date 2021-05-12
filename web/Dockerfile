@@ -1,8 +1,3 @@
-#FROM node:alpine AS dev
-#COPY ./sapper .
-#EXPOSE 3000
-#CMD ["npm", "run", "start"]
-
 FROM node:alpine
 WORKDIR /goTemp/web/sapper
 COPY ./sapper/package*.json ./

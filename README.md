@@ -22,7 +22,6 @@ In its current incarnation (this is wip), this mono-repo uses the following stac
 - `TimescaleDB` time series DB used for historical audit data storage
 - `ArangoDB`is a multi-model database used for master data storage
 - `Redis` is used to cache data and reduce number of data requests to other services
-- `Vault` for credentials management when running in Kubernetes
 
 In terms of the web front end, the stack is as follows:
 
@@ -42,7 +41,6 @@ Finally, for orchestration, the stack is as follows:
 - `BuildPacks` for creating application images
 - `Screwdriver` for CI/CD
 - `Docker-compose` to run the application
-- `Minikube` to run the application in Kubernetes
 
 Below is a diagram that displays the overall setup of the application:
 
@@ -117,145 +115,6 @@ To stop the application:
     make stop
 ```
 
-## Running the application on Kubernetes (Minikube)
-
-
-#### Prerequisites
-
-##### Minikube
-
-Ensure that Minikube is installed and running.
-
-##### Ingress
-
-The application front end connects with the API gateway using via a K8s ingress resource. As such, the ingress addon must be
-enabled in Minikube.  To enabled it, run: 
-
-```bash
-    minikube addons enable ingress
-```
-Check the ingress is working using the command below. The command's results should include an entry for the ingress.
-
-```bash
-    kubectl get pods -n kube-system
-```
-
-
-#### Building and pushing images (optional)
-
-
-Out of the box, the Kubernetes manifest will pull existing Bolbeck goTemp images from Docker Hub. 
-You are welcome to change the Kubernetes manifests in the `./cicd/K8s` folder to pull your own images.
-To build your own images of each service and push them to docker hub run the command below for each of the services:
-
-```bash
-    make hubpush SERVICE=<serivceName> FOLDER=<folderName>
-```
-
-where serviceName is the name of the service for which the image should be built
-      folderName is the folder that contains the docker file used to build the service image
- 
- Example:
- 
-```bash
-     make hubpush SERVICE=usersrv FOLDER=./user
-```
-
-
-Note that for the web front end and for Timescale DB the command to be used is slightly different:
-
-
-```bash
-     make hubpushcontext SERVICE=<serivceName> FOLDER=<folderName>
-```
-
-#### Running without Vault
-
-Once the ingress has been enabled, deploy the application to Minikube:
-
-```bash
-    make startkub
-```
- 
-If this is the first time running the application in Minikube, the ingress IP address should be configured.
-Once the application is deployed, check the address and host assigned to the ingress:
-    
-```bash
-    kubectl get ingress
-```
-
-Note that it takes a couple of minutes for K8s to assign the IP to the ingress. As such wait for that happens before moving ahead.
-
-Grab the address & the host from the result of the command above, and add it to your `/etc/hosts` file:
-
-```
-    <ipAddress> gotemp.tst
-```
-
-Finally, access app:
-
-```bash
-    minikube service web
-```
-
-To stop the application:
-
-```bash
-  make stopkub
-```
-
-Note that if you stop the application, you can restart it by just running: 
-
-```bash
-  make startkub
-  minikube service web
-```
-
-
-#### Running with Vault integration
-
-*Before running the app integrated with Vault*, follow the steps in the ```./vault/README.md``` directory to set up and prepare Vault 
-
-Once the ingress has been enabled and Vault is ready to go, deploy the application to Minikube:
-
-```bash
-    make vstartkub
-```
-
-If this is the first time running the application in Minikube, the ingress IP address should be configured.
-Once the application is deployed, check the address and host assigned to the ingress:
-
-```bash
-    kubectl get ingress
-```
-
-Note that it takes a couple of minutes for K8s to assign the IP to the ingress. As such wait for that happens before moving ahead.
-
-Grab the address & the host from the result of the command above, and add it to your `/etc/hosts` file:
-
-```
-    <ipAddress> gotemp.tst
-```
-
-Finally, access app:
-
-```bash
-    minikube service web
-```
-
-To stop the application:
-
-```bash
-     make vstopkub
-```
-
-#### Observability
-
-Observability tools access while the application is running in K8s (with or without Vault):
-
-- Prometheus: `minikube service prometheus`
-- Grafana: `minikube service grafana`
-
 ## Repo organization
 
 The project is organized in a way that each folder represents either a service, a database or a shared library package.
@@ -263,7 +122,6 @@ Currently, we have the following:
 
 - `arangodb`: Volumes mounted to the ArangoDB container as well as data initialization scripts
 - `audit`: Audit service to collect and store historical audit information
-- `cicd` : Holds files related to CI/CD and orchestration
 - `customer`: Customer master data service
 - `diagramforDocs`: Diagrams used in the readme documents
 - `globalErrors`: Generic errors shared package
@@ -279,12 +137,11 @@ Currently, we have the following:
 - `redis`: Volumes mounted on the redis container as well as config files (if any)
 - `timescaleDB`: Volumes mounted to the Timescale DB container as well as data initialization scripts
 - `user`: User and authentication service
-- `Vault`: Scripts & policies needed to run the app in K8s with Vault
 - `web`: application web frontend
 
 Additionally, we have the following files in the root directory as well:
 
-- `project.toml`: Files to be ignored when building service images
+- `project.toml`: Files that configures how Buildpack creates images
 - `.gitignore`: Files to be ignored by git
 - `docker-compose`: File controls the building of the different services and their dependencies
 - `docker-compose-test`: Override compose file that can be used to test different services with their dependencies
@@ -292,6 +149,9 @@ Additionally, we have the following files in the root directory as well:
 - `main.go`: Not used for services yet
 - `Makefile`: shortcuts to common actions
 - `Readme.md`: Well... this file...
+- `screwdriver.yaml`: File controls the pipeline that Screwdriver uses to build the service, and the web front end
+- `screwdriver-srv.yaml`: Partial file for the Screwdriver pipeline for building the service.
+- `screwdriver-web.yaml`: Partial file for the Screwdriver pipeline for building the web frontend.
 
 ## Services
 
@@ -394,33 +254,6 @@ All of our main routes are pretty standard in terms of organization. We will use
 - `_detail.svelte`: Holds the gui and bulk of the logic for adding or editing customers. It is called by new.svelte and [slug].svelte .
 
 There are three routes that do not share the structure above as they have very little functionality and thus are server by a single index.svelte component: root, register and login.
-
-## Kubernetes
-
-The application configuration in K8s can be seen in the diagram below. Note that the diagram shows just one of the different microservices and its associated database.
-The configuration for all other microservices, beyond the shared ingress and API Gateway, is similar to the one depicted in the diagram.
-
-![Diagram showing goTemp components](diagramsforDocs/goTemp_Diagram-k8s_v3.png)
-
-Notes:
-- When running the application with Vault, the microservices secrets will be superseded by the secrets stored in Vault.
-- The microservices, ArangoDB and NATS have Prometheus metric scrape endpoints built-in. On the other hand, Redis, PostgresDB and TimescaleDB use adapter containers to expose the data to Prometheus.
-- To keep the diagram simple, the K8s services for the database, Vault, Prometheus and Grafana are not displayed in the diagram.
-
-### Organization
-
-The K8s files live in the `./cicd/K8s` folder, and it is organized as follows:
-
-- `clients` : These are the test clients for each of the services.
-- `dbsAndBroker`: Contains the manifests for all the databases and for the broker
-- `ingress`: Manifest to create the ingress resource that allows the frontend, and the back end to communicate
-- `monitoring`: holds the manifests to deploy monitoring resources (Prometheus, Grafana)
-- `services`: Contains all the services and related entities manifest (deployment, service, etc...).
-- `vault`: Manifests to create the service accounts and patches to integrate the application with Vault
-- `web`: Manifest for the web front end and the API gateway
-
-Note that within each of the folders, most related manifests are organized  using a prefix. 
-For example, all the front end related services start with the 'web' prefix.
 
 ## Additional information:
 

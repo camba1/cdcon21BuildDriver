@@ -65,11 +65,6 @@ hubpushweb:
 	pack build bolbeck/cdconweb --path ./web/sapper  --builder gcr.io/buildpacks/builder:v1
 	docker push bolbeck/cdconweb
 
-#hubpushcontext:
-#	docker build -t $$SERVICE -f  ./$$FOLDER/Dockerfile ./$$FOLDER
-#	docker tag $$SERVICE bolbeck/gotemp_$$SERVICE
-#	docker push bolbeck/gotemp_$$SERVICE
-
 # -------------------------------------------------------------------------------------
 
 # Run service directly
@@ -122,124 +117,8 @@ authviaapigateway:
 	--header 'Content-Type: application/json' \
 	--data-raw '{"pwd":"1234","email":"duck@mymail.com"}'
 
-# -------------------------------------------------------------------------------------
-
-# K8s wihtout Vault
-
-startkub:
-	kubectl apply -f cicd/K8s/dbsAndBroker
-	kubectl apply -f cicd/K8s/services
-	kubectl apply -f cicd/K8s/monitoring
-	kubectl apply -f cicd/K8s/web
-	kubectl apply -f cicd/K8s/ingress
-stopkub:
-	kubectl delete -f cicd/K8s/ingress
-	kubectl delete -f cicd/K8s/web
-	kubectl delete -f cicd/K8s/monitoring
-	kubectl delete -f cicd/K8s/services
-	kubectl delete -f cicd/K8s/dbsAndBroker
-
-
-kapplyingress:
-	kubectl apply -f cicd/K8s/ingress
-kapplydbandborkers:
-	kubectl apply -f cicd/K8s/dbsAndBroker
-kapplyservices:
-	kubectl apply -f cicd/K8s/services
-kapplyclients:
-	kubectl apply -f cicd/K8s/clients
-kapplyweb:
-	kubectl apply -f cicd/K8s/web
-kdelete:
-	kubectl delete -f $FOLDER
-
-kstartSubset:
-	kubectl apply $$(ls cicd/K8s/services/audit*.yaml | awk ' { print " -f " $$1 } ')
-
-
-
-# -------------------------------------------------------------------------------------
-
-# Run Micro in K8s with Vault for service secret management
-
-# ---- Setup Vault ------
-
-# init secrets and K8s auth in Vault
-
-vkubinit:
-	kubectl cp vault/scripts vault-0:/vault/file/scripts
-	kubectl exec vault-0 -- /vault/file/scripts/setup.sh $$VAULT_TOKEN
-
-# Populate secrets, create roles and policies
-vkubsetup:
-	kubectl cp vault/policies vault-0:/vault/file/
-	kubectl cp vault/scripts vault-0:/vault/file/
-	kubectl exec vault-0 -- /vault/file/scripts/allServices.sh  $$VAULT_TOKEN
-
-# ---- Start and stop app ------
-
-# Start application and patch it
-vstartkub:
-	make startkub
-	make vkubpatchdeploy
-
-# Stop application and delete service accounts
-vstopkub:
-	make stopkub
-	kubectl delete -f cicd/K8s/vault/serviceAccount
-
-# ------ Remove setup from Vault -------
-
-
-# Remove secrets, create roles and policies
-vkubteardown:
-	kubectl exec vault-0 -- /vault/file/scripts/deleteAllSrv.sh $$VAULT_TOKEN
-	make vkubcleancontainer
-
-# Remove secret engine and K8s auth in Vault
-vkubsetupdelete:
-	kubectl cp vault/scripts vault-0:/vault/file/scripts
-	kubectl exec vault-0 -- /vault/file/scripts/deleteSetup.sh  $$VAULT_TOKEN
-	make vkubcleancontainer
-
-# ---- Vault Misc --------
-
-# Unseal Vault on startup
-vkubunseal:
-	kubectl exec -ti vault-0 -- vault operator unseal $$KEY
-# Enable Vault UI port
-vkubui:
-	kubectl port-forward vault-0 8100:8200
-
-# Apply patches to the services' deployments so they are visible to the Vault Agent
-vkubpatchdeploy:
-	kubectl apply -f cicd/K8s/vault/serviceAccount
-	kubectl patch deployment auditsrv --patch "$$(cat cicd/K8s/vault/patch/auditsrv-deployment-patch.yaml)"
-	kubectl patch deployment customersrv --patch "$$(cat cicd/K8s/vault/patch/customersrv-deployment-patch.yaml)"
-	kubectl patch deployment productsrv --patch "$$(cat cicd/K8s/vault/patch/productsrv-deployment-patch.yaml)"
-	kubectl patch deployment promotionsrv --patch "$$(cat cicd/K8s/vault/patch/promotionsrv-deployment-patch.yaml)"
-	kubectl patch deployment usersrv --patch "$$(cat cicd/K8s/vault/patch/usersrv-deployment-patch.yaml)"
-
-
-# Clean scripts and policies in Vault container
-vkubcleancontainer:
-	kubectl exec vault-0 -- rm -rf /vault/file/scripts/
-	kubectl exec vault-0 -- rm -rf /vault/file/policies/
-
-# Test that Vault is populating the secrets properly by deploying YAMLs without the K8s secrets
-vkubtestrmsecret:
-	kubectl apply -f cicd/K8s/vault/testYamlFile
-
 # ----  Monitoring --------
 
 # Check the service metrics when running on docker
 getsrvmetrics:
 	curl http://localhost:$$PORT/metrics
-
-# ----  Misc --------
-
-encode:
-	echo -n 'data' | base64
-decode:
-	echo -n ZGF0YQ== | base64 -d
-

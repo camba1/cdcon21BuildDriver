@@ -114,3 +114,4 @@ Temporary Items
 /vault/keys.txt
 /grafana/data/
 /prometheus/data/
+/demo.sh
